@@ -21,6 +21,8 @@ async function getVideoCanvas(drawCallback = () => {}) {
     async function setCamera(index) {
         currentDevice = avalableDevices[index];
 
+        debug.innerText = JSON.stringify(currentDevice.getCapabilities(), null, '  ');
+
         if(currentDevice) {
             navigator.mediaDevices.getUserMedia({
                 video: {

@@ -126,3 +126,15 @@ body {
 #colorBlue {
     background: rgb(var(--colorBlue), var(--colorBlue), var(--colorBlue));
 }
+
+#debug {
+    position: fixed;
+    max-width: 90%;
+    top: 100px;
+    left: 20px;
+    z-index: 10000;
+    color: white;
+    background: black;
+    word-break: break-all;
+    overflow: hidden;
+}
