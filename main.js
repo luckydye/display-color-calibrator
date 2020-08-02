@@ -6,8 +6,8 @@ async function getVideoCanvas(drawCallback = () => {}) {
 
     const videoStream = await navigator.mediaDevices.getUserMedia({
         video: {
-            width: { min: 640, ideal: 1080, max: 1080 },
-            height: { min: 400, ideal: 1920 },
+            width: { min: 400, ideal: 1080 },
+            height: { min: 640, ideal: 1920 },
             facingMode: { ideal: "enviroment" }
         }
       });
