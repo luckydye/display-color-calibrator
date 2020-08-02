@@ -4,7 +4,12 @@ async function getVideoCanvas(drawCallback = () => {}) {
 
     canvas.className = "camera";
 
-    const videoStream = await navigator.mediaDevices.getUserMedia({ video: true });
+    const videoStream = await navigator.mediaDevices.getUserMedia({
+        width: { min: 640, ideal: 1080, max: 1080 },
+        height: { min: 400, ideal: 1920 },
+        frameRate: { ideal: 60, max: 60 },
+        facingMode: { exact: "environment" }
+      });
 
     const video = document.createElement('video');
 
