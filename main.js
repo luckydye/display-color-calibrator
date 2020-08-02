@@ -5,10 +5,11 @@ async function getVideoCanvas(drawCallback = () => {}) {
     canvas.className = "camera";
 
     const videoStream = await navigator.mediaDevices.getUserMedia({
-        width: { min: 640, ideal: 1080, max: 1080 },
-        height: { min: 400, ideal: 1920 },
-        frameRate: { ideal: 60, max: 60 },
-        facingMode: { exact: "environment" }
+        video: {
+            width: { min: 640, ideal: 1080, max: 1080 },
+            height: { min: 400, ideal: 1920 },
+            facingMode: { ideal: "enviroment" }
+        }
       });
 
     const video = document.createElement('video');
@@ -20,12 +21,12 @@ async function getVideoCanvas(drawCallback = () => {}) {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
 
-        const x = (canvas.clientWidth / 2) - (video.videoWidth / 2);
-        const y = (canvas.clientHeight / 2) - (video.videoHeight / 2);
-
         context.fillStyle = "#000";
         context.fillRect(0, 0, canvas.width, canvas.height);
-        context.drawImage(video, x, y, video.videoWidth, video.videoHeight);
+
+        const ar = video.videoWidth / video.videoHeight;
+
+        context.drawImage(video, 0, 0, canvas.width, canvas.width / ar);
 
         drawCallback(context);
 
@@ -42,8 +43,8 @@ function getPixel(context, x, y) {
 }
 
 async function init() {
-    let pinX = 0;
-    let pinY = 0;
+    let pinX = window.innerWidth / 2;
+    let pinY = window.innerHeight / 2;
     let pinColor = "rgba(255, 255, 255, 255)";
 
     const drawCallback = (context) => {
