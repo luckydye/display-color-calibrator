@@ -1,5 +1,11 @@
 const DEBUG = (location.hash == "#debug");
 
+function debugLine(str) {
+    if(DEBUG) {
+        debug.innerHTML += str;
+    }
+}
+
 async function getVideoCanvas() {
     const canvas = document.createElement('canvas');
     const context = canvas.getContext("2d");
@@ -11,6 +17,7 @@ async function getVideoCanvas() {
     let avalableDevices = [];
     let cameraIndex = 1;
     let currentDevice = null;
+    let camToggle = false;
 
     for(let device of devices) {
         if(device.kind == "videoinput") {
@@ -23,8 +30,8 @@ async function getVideoCanvas() {
     async function setCamera(index) {
         currentDevice = avalableDevices[index];
 
-        if(DEBUG) {
-            debug.innerText = JSON.stringify(currentDevice.getCapabilities(), null, '  ');
+        if(camToggle) {
+            debugLine(JSON.stringify(currentDevice.getCapabilities(), null, '  '));
         }
 
         if(currentDevice) {
@@ -42,6 +49,7 @@ async function getVideoCanvas() {
 
         } else {
             console.error('No device found');
+            debugLine("<b>No device found</b>");
         }
     }
 
@@ -64,8 +72,6 @@ async function getVideoCanvas() {
     draw();
 
     mainContent.appendChild(canvas);
-
-    let camToggle = false;
 
     return {
         context,
@@ -139,7 +145,7 @@ async function init() {
             console.log('ServiceWorker registration successful with scope: ', registration.scope);
         }, function(err) {
             console.log('ServiceWorker registration failed: ', err);
-            debug.innerHTML += "<b>ServiceWorker registration failed</b>";
+            debugLine(`<b>ServiceWorker registration failed</b> ${err.message}`);
         });
     }
 }
