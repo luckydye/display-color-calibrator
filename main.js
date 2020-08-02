@@ -66,7 +66,9 @@ async function getVideoCanvas() {
 
         const ar = video.videoWidth / video.videoHeight;
 
-        context.drawImage(video, 0, 0, canvas.width, canvas.width / ar);
+        const y = (canvas.height / 2) - (video.videoHeight / 2);
+
+        context.drawImage(video, 0, y, canvas.width, canvas.width / ar);
 
         requestAnimationFrame(draw);
     }
