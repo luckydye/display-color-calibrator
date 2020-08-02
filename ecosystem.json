@@ -1,0 +1,18 @@
+{
+	"apps": [{
+		"name"      : "display-color-calibrator"
+	}],
+	"deploy": {
+		"production": {
+			"user": "ubuntu",
+			"host": ["dev.luckydye.de"],
+			"ref" : "origin/master",
+			"repo": "git@github.com:luckydye/display-color-calibrator.git",
+			"path": "/srv/display-color-calibrator",
+			"post-deploy": "",
+			"env"  : {
+				"PORT": "00000"
+			}
+		}
+	}
+}
