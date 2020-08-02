@@ -1,6 +1,6 @@
 const DEBUG = (location.hash == "#debug");
 
-async function getVideoCanvas(drawCallback = () => {}) {
+async function getVideoCanvas() {
     const canvas = document.createElement('canvas');
     const context = canvas.getContext("2d");
 
@@ -58,8 +58,6 @@ async function getVideoCanvas(drawCallback = () => {}) {
 
         context.drawImage(video, 0, 0, canvas.width, canvas.width / ar);
 
-        drawCallback(context);
-
         requestAnimationFrame(draw);
     }
 
@@ -70,6 +68,7 @@ async function getVideoCanvas(drawCallback = () => {}) {
     let camToggle = false;
 
     return {
+        context,
         canvas,
         toggleCamera() {
             camToggle = !camToggle;
@@ -96,12 +95,10 @@ async function init() {
     let pinY = window.innerHeight / 2;
     let pinColor = "rgba(255, 255, 255, 255)";
 
-    const drawCallback = (context) => {
+    const { canvas, context, toggleCamera } = await getVideoCanvas();
+    
+    const updateColor = () => {
         const pixel = getPixel(context, pinX, pinY);
-
-        colorRed.innerText = pixel[0];
-        colorGreen.innerText = pixel[1];
-        colorBlue.innerText = pixel[2];
 
         colorRed.innerText = pixel[0];
         colorGreen.innerText = pixel[1];
@@ -115,7 +112,7 @@ async function init() {
         mainContent.style.setProperty('--pinColor', pinColor);
     }
 
-    const { canvas, toggleCamera } = await getVideoCanvas(drawCallback);
+    setInterval(() => updateColor(), 1000 / 24);
 
     canvas.addEventListener('pointerdown', e => {
         pinX = e.x;
@@ -136,6 +133,15 @@ async function init() {
         e.preventDefault();
         e.stopPropagation();
     })
+
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/service-worker.js').then(registration => {
+            console.log('ServiceWorker registration successful with scope: ', registration.scope);
+        }, function(err) {
+            console.log('ServiceWorker registration failed: ', err);
+            debug.innerHTML += "<b>ServiceWorker registration failed</b>";
+        });
+    }
 }
 
 window.addEventListener('DOMContentLoaded', e => {
