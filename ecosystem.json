@@ -9,7 +9,7 @@
 			"ref" : "origin/master",
 			"repo": "git@github.com:luckydye/display-color-calibrator.git",
 			"path": "/srv/display-color-calibrator",
-			"post-deploy": "",
+			"post-deploy": "echo DONE",
 			"env"  : {
 				"PORT": "00000"
 			}
