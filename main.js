@@ -118,7 +118,7 @@ async function init() {
         mainContent.style.setProperty('--pinColor', pinColor);
     }
 
-    setInterval(() => updateColor(), 1000 / 24);
+    setInterval(() => updateColor(), 1000 / 15);
 
     canvas.addEventListener('pointerdown', e => {
         pinX = e.x;
