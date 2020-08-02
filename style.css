@@ -117,19 +117,21 @@ body {
 
 #colorRed {
     --color: hsl(0, 70%, 50%);
+    background: rgb(var(--colorRed), var(--colorRed), var(--colorRed));
 }
 #colorGreen {
     --color: hsl(120, 70%, 50%);
+    background: rgb(var(--colorGreen), var(--colorGreen), var(--colorGreen));
 }
 #colorBlue {
     --color: hsl(240, 70%, 50%);
+    background: rgb(var(--colorBlue), var(--colorBlue), var(--colorBlue));
 }
 
 #colorRed,
 #colorGreen,
 #colorBlue {
     position: relative;
-    background: rgb(var(--colorBlue), var(--colorBlue), var(--colorBlue));
 }
 
 #colorRed::after,
@@ -154,5 +156,7 @@ body {
     color: white;
     background: black;
     word-break: break-all;
+    white-space: break-spaces;
     overflow: hidden;
+    max-height: 90vh;
 }

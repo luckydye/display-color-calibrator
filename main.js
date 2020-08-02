@@ -4,6 +4,7 @@ function debugLine(str) {
     if(DEBUG) {
         debug.innerHTML += str;
     }
+    debug.scrollTo(0, debug.scrollHeight);
 }
 
 async function getVideoCanvas() {
@@ -21,6 +22,7 @@ async function getVideoCanvas() {
 
     for(let device of devices) {
         if(device.kind == "videoinput") {
+            console.log(device);
             avalableDevices.push(device);
         }
     }
