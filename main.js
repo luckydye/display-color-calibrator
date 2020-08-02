@@ -1,3 +1,5 @@
+const DEBUG = (location.hash == "#debug");
+
 async function getVideoCanvas(drawCallback = () => {}) {
     const canvas = document.createElement('canvas');
     const context = canvas.getContext("2d");
@@ -21,7 +23,9 @@ async function getVideoCanvas(drawCallback = () => {}) {
     async function setCamera(index) {
         currentDevice = avalableDevices[index];
 
-        debug.innerText = JSON.stringify(currentDevice.getCapabilities(), null, '  ');
+        if(DEBUG) {
+            debug.innerText = JSON.stringify(currentDevice.getCapabilities(), null, '  ');
+        }
 
         if(currentDevice) {
             navigator.mediaDevices.getUserMedia({
@@ -86,6 +90,8 @@ function getPixel(context, x, y) {
 }
 
 async function init() {
+    window.scrollTo(0,1);
+
     let pinX = window.innerWidth / 2;
     let pinY = window.innerHeight / 2;
     let pinColor = "rgba(255, 255, 255, 255)";
