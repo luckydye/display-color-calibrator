@@ -97,8 +97,6 @@ function getPixel(context, x, y) {
 }
 
 async function init() {
-    window.scrollTo(0,1);
-
     let pinX = window.innerWidth / 2;
     let pinY = window.innerHeight / 2;
     let pinColor = "rgba(255, 255, 255, 255)";
@@ -143,7 +141,7 @@ async function init() {
     })
 
     if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('/service-worker.js').then(registration => {
+        navigator.serviceWorker.register('./service-worker.js').then(registration => {
             console.log('ServiceWorker registration successful with scope: ', registration.scope);
         }, function(err) {
             console.log('ServiceWorker registration failed: ', err);
