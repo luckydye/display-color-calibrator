@@ -4,18 +4,42 @@ async function getVideoCanvas(drawCallback = () => {}) {
 
     canvas.className = "camera";
 
-    const videoStream = await navigator.mediaDevices.getUserMedia({
-        video: {
-            width: { min: 400, ideal: 1080 },
-            height: { min: 640, ideal: 1920 },
-            facingMode: { ideal: "enviroment" }
+    const devices = await navigator.mediaDevices.enumerateDevices();
+
+    let avalableDevices = [];
+    let cameraIndex = 1;
+    let currentDevice = null;
+
+    for(let device of devices) {
+        if(device.kind == "videoinput") {
+            avalableDevices.push(device);
         }
-      });
+    }
 
     const video = document.createElement('video');
 
-    video.srcObject = videoStream;
-    video.play();
+    async function setCamera(index) {
+        currentDevice = avalableDevices[index];
+
+        if(currentDevice) {
+            navigator.mediaDevices.getUserMedia({
+                video: {
+                    deviceId: {exact: currentDevice.deviceId}
+                }
+            }).then(stream => {
+                video.srcObject = stream;
+                video.play();
+            }).catch(err => {
+                console.log(err);
+                setCamera(cameraIndex++);
+            })
+
+        } else {
+            console.error('No device found');
+        }
+    }
+
+    setCamera(cameraIndex);
 
     const draw = ms => {
         canvas.width = window.innerWidth;
@@ -36,6 +60,23 @@ async function getVideoCanvas(drawCallback = () => {}) {
     draw();
 
     mainContent.appendChild(canvas);
+
+    let camToggle = false;
+
+    return {
+        canvas,
+        toggleCamera() {
+            camToggle = !camToggle;
+
+            if(camToggle) {
+                cameraIndex--;
+            } else {
+                cameraIndex++;
+            }
+
+            setCamera(cameraIndex);
+        }
+    }
 }
 
 function getPixel(context, x, y) {
@@ -66,9 +107,9 @@ async function init() {
         mainContent.style.setProperty('--pinColor', pinColor);
     }
 
-    await getVideoCanvas(drawCallback);
+    const { canvas, toggleCamera } = await getVideoCanvas(drawCallback);
 
-    window.addEventListener('pointerdown', e => {
+    canvas.addEventListener('pointerdown', e => {
         pinX = e.x;
         pinY = e.y;
 
@@ -81,6 +122,12 @@ async function init() {
     });
 
     window.dispatchEvent(new Event('pinchange'));
+
+    document.querySelector('.camera-toggle').addEventListener('click', function (e) {
+        toggleCamera();
+        e.preventDefault();
+        e.stopPropagation();
+    })
 }
 
 window.addEventListener('DOMContentLoaded', e => {
